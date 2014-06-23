@@ -1,0 +1,8 @@
+First install and compile the emulator as detailed in
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TOfflineDev 
+Then clone the repository: 
+> git clone git@github.com:jbsauvan/L1TEmulatorWrapper.git L1TEmulatorWrapper
+> cd L1TEmulatorWrapper
+Finally compile the wrapper library. Make sure you have done cmsenv before compiling, otherwise it won't find the CMSSW emulator headers and libraries.
+> make
+The library is created in lib/
