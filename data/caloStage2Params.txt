@@ -40,4 +40,4 @@ tauCalibrationLUTFileBarrelC: L1Trigger/L1TCalorimeter/data/tauCalibrationLUTBar
 tauCalibrationLUTFileEndcapsA: L1Trigger/L1TCalorimeter/data/tauCalibrationLUTEndcapsA.txt
 tauCalibrationLUTFileEndcapsB: L1Trigger/L1TCalorimeter/data/tauCalibrationLUTEndcapsB.txt
 tauCalibrationLUTFileEndcapsC: L1Trigger/L1TCalorimeter/data/tauCalibrationLUTEndcapsC.txt
-
+tauCalibrationLUTFileEta: L1Trigger/L1TCalorimeter/data/tauCalibrationLUTEta.txt

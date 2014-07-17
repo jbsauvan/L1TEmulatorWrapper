@@ -290,5 +290,16 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
     std::shared_ptr<l1t::LUT> tauCalibrationLUTEndcapsC( new l1t::LUT(tauCalibrationLUTStreamEndcapsC) );
     m_params.setTauCalibrationLUTEndcapsC(tauCalibrationLUTEndcapsC);
 
+    stringstream tauCalibrationLUTFileEta;
+    tauCalibrationLUTFileEta << getenv("CMSSW_BASE") << "/src/" << params.GetValue("tauCalibrationLUTFileEta", "L1Trigger/L1TCalorimeter/data/tauCalibrationLUTEta.txt");
+    std::ifstream tauCalibrationLUTStreamEta(tauCalibrationLUTFileEta.str());
+    if(!tauCalibrationLUTStreamEta.is_open())
+    {
+        cout<<"[ERROR] Cannot open " << tauCalibrationLUTFileEta.str()<<"\n";
+        return false;
+    }
+    std::shared_ptr<l1t::LUT> tauCalibrationLUTEta( new l1t::LUT(tauCalibrationLUTStreamEta) );
+    m_params.setTauCalibrationLUTEta(tauCalibrationLUTEta);
+
     return true;
 }
