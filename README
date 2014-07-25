@@ -1,8 +1,24 @@
 First install and compile the emulator as detailed in
-https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TOfflineDev 
-Then clone the repository: 
+https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TOfflineDev#Work_flow_for_cms_l1t_offline_de
+The steps are copied here for completeness:
+cmsrel CMSSW_7_1_0_pre8
+cd CMSSW_7_1_0_pre8/src
+cmsenv
+git cms-merge-topic --unsafe cms-l1t-offline:l1t-devel-$CMSSW_VERSION
+git checkout -b mydevel-branch
+scram b -j 4
+
+Then, outside CMSSW, install the wrapper code by first cloning the repository: 
 > git clone git@github.com:jbsauvan/L1TEmulatorWrapper.git L1TEmulatorWrapper
 > cd L1TEmulatorWrapper
-Finally compile the wrapper library. Make sure you have done cmsenv before compiling, otherwise it won't find the CMSSW emulator headers and libraries.
+Compile the wrapper library. Make sure cmsenv has been called before compiling, otherwise it won't find the CMSSW emulator headers and libraries.
 > make
 The library is created in lib/
+Finally set the environment variables with:
+> source wrapenv
+This will define the wrapper base directory (in EMUL_WRAPPER_BASE) and append the correct library path in LD_LIBRARY_PATH.
+
+At each session where the CMSSW emulator is used through the wrapper, the environment has to be set with:
+(1) 'cmsenv' in the correct CMSSW area containing the emulator
+(2) 'source wrapenv' in the wrapper area
+
