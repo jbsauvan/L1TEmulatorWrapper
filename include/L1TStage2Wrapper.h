@@ -39,6 +39,7 @@ namespace l1twrapper
                             const std::vector<int>& hwEtEm, const std::vector<int>& hwEtHad, 
                             const std::vector<int>& hwEtRatio, const std::vector<int>& hwQual
                     );
+            bool process(const std::vector<l1t::CaloTower>& towers);
 
             const std::vector<l1t::CaloTower>&   towers()      const {return m_towers;}
             const std::vector<l1t::CaloCluster>& egClusters()  const {return m_egClusters;}
