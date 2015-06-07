@@ -61,6 +61,7 @@ bool L1TStage2Wrapper::initialize(const string& parameterFile)
 
     // initialize algos
     m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::E);
+    //m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::EH);
     m_egAlgo         = new l1t::Stage2Layer2EGammaAlgorithmFirmwareImp1(&m_params);
     m_tauClusterAlgo = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::EH);
     m_tauAlgo        = new l1t::Stage2Layer2TauAlgorithmFirmwareImp1(&m_params);
