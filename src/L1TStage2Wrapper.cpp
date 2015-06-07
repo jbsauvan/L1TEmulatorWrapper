@@ -87,8 +87,8 @@ bool L1TStage2Wrapper::process(const vector<int>& hwEta, const vector<int>& hwPh
     // build objects
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
-    m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
-    m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
+    //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
+    //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
     return true;
 }
@@ -108,8 +108,8 @@ bool L1TStage2Wrapper::process(const vector<l1t::CaloTower>& towers)
     // build objects
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
-    m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
-    m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
+    //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
+    //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
     return true;
 }
@@ -168,12 +168,14 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
     m_params.setTowerEncoding   (params.GetValue("towerEncoding"    , false));
 
     // EG
+    m_params.setCalibration_version  (params.GetValue("calibration_version"        , 0));
+
     m_params.setEgLsb                (params.GetValue("egLsb"                      , 0.5));
     m_params.setEgSeedThreshold      (params.GetValue("egSeedThreshold"            , 2.));
     m_params.setEgNeighbourThreshold (params.GetValue("egNeighbourThreshold"       , 1.));
     m_params.setEgHcalThreshold      (params.GetValue("egHcalThreshold"            , 1.));
     m_params.setEgMaxHcalEt          (params.GetValue("egMaxHcalEt"                , 0.));
-    m_params.setEgEtToRemoveHECut    (params.GetValue("egEtToRemoveHECut"          , 128.));
+    m_params.setEgMaxPtHOverE        (params.GetValue("egMaxPtHOverE"          , 128.));
     m_params.setEgPUSType            (params.GetValue("egPUSType"               , "None"));
 
     stringstream egTrimmingLUTFile;
@@ -185,7 +187,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egTrimmingLUT( new l1t::LUT(egTrimmingLUTStream) );
-    m_params.setEgTrimmingLUT(egTrimmingLUT);
+    m_params.setEgTrimmingLUT(*egTrimmingLUT);
 
     stringstream egCompressShapesLUTFile;
     egCompressShapesLUTFile << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egCompressShapesLUTFile", "L1Trigger/L1TCalorimeter/data/egCompressShapesLUT.txt");
@@ -196,7 +198,54 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egCompressShapesLUT( new l1t::LUT(egCompressShapesLUTStream) );
-    m_params.setEgCompressShapesLUT(egCompressShapesLUT);
+    m_params.setEgCompressShapesLUT(*egCompressShapesLUT);
+
+
+
+    //New compression LUTs for calibration
+
+    stringstream egCompressShapesLUTFile_calibr_new;
+    egCompressShapesLUTFile_calibr_new << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egCompressShapesLUTFile_calibr_new", "L1Trigger/L1TCalorimeter/data/egCompressShapesLUT_calibr_4bit.txt");
+    std::ifstream egCompressShapesLUTStream_calibr_new(egCompressShapesLUTFile_calibr_new.str());
+    if(!egCompressShapesLUTStream_calibr_new.is_open())
+    {
+        cout<<"[ERROR] Cannot open " << egCompressShapesLUTFile_calibr_new.str()<<"\n";
+        return false;
+    }
+    std::shared_ptr<l1t::LUT> egCompressShapesLUT_calibr_new( new l1t::LUT(egCompressShapesLUTStream_calibr_new) );
+    m_params.setEgCompressShapesLUT_calibr_new(*egCompressShapesLUT_calibr_new);
+
+
+
+
+    stringstream egCompressELUTFile_calibr_new;
+    egCompressELUTFile_calibr_new << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egCompressELUTFile_calibr_new", "L1Trigger/L1TCalorimeter/data/egCompressELUT_4bit.txt");
+    std::ifstream egCompressELUTStream_calibr_new(egCompressELUTFile_calibr_new.str());
+    if(!egCompressELUTStream_calibr_new.is_open())
+    {
+        cout<<"[ERROR] Cannot open " << egCompressELUTFile_calibr_new.str()<<"\n";
+        return false;
+    }
+    std::shared_ptr<l1t::LUT> egCompressELUT_calibr_new( new l1t::LUT(egCompressELUTStream_calibr_new) );
+    m_params.setEgCompressELUT_calibr_new(*egCompressELUT_calibr_new);
+
+
+
+    stringstream egCompressEtaLUTFile_calibr_new;
+    egCompressEtaLUTFile_calibr_new << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egCompressEtaLUTFile_calibr_new", "L1Trigger/L1TCalorimeter/data/egCompressEtaLUT_4bit.txt");
+    std::ifstream egCompressEtaLUTStream_calibr_new(egCompressEtaLUTFile_calibr_new.str());
+    if(!egCompressEtaLUTStream_calibr_new.is_open())
+    {
+        cout<<"[ERROR] Cannot open " << egCompressEtaLUTFile_calibr_new.str()<<"\n";
+        return false;
+    }
+    std::shared_ptr<l1t::LUT> egCompressEtaLUT_calibr_new( new l1t::LUT(egCompressEtaLUTStream_calibr_new) );
+    m_params.setEgCompressEtaLUT_calibr_new(*egCompressEtaLUT_calibr_new);
+
+
+
+
+
 
     stringstream egMaxHOverELUTFile;
     egMaxHOverELUTFile << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egMaxHOverELUTFile", "L1Trigger/L1TCalorimeter/data/egMaxHOverELUT.txt");
@@ -207,7 +256,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egMaxHOverELUT( new l1t::LUT(egMaxHOverELUTStream) );
-    m_params.setEgMaxHOverELUT(egMaxHOverELUT);
+    m_params.setEgMaxHOverELUT(*egMaxHOverELUT);
 
     stringstream egShapeIdLUTFile;
     egShapeIdLUTFile << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egShapeIdLUTFile", "L1Trigger/L1TCalorimeter/data/egShapeIdLUT.txt");
@@ -218,7 +267,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egShapeIdLUT( new l1t::LUT(egShapeIdLUTStream) );
-    m_params.setEgShapeIdLUT(egShapeIdLUT);
+    m_params.setEgShapeIdLUT(*egShapeIdLUT);
 
     stringstream egIsoLUTFile;
     egIsoLUTFile << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egIsoLUTFile", "L1Trigger/L1TCalorimeter/data/egIsoLUT_PU40bx25.txt");
@@ -229,7 +278,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egIsoLUT( new l1t::LUT(egIsoLUTStream) );
-    m_params.setEgIsolationLUT(egIsoLUT);
+    m_params.setEgIsolationLUT(*egIsoLUT);
 
     m_params.setEgIsoAreaNrTowersEta       (params.GetValue("egIsoAreaNrTowersEta"       , 2));
     m_params.setEgIsoAreaNrTowersPhi       (params.GetValue("egIsoAreaNrTowersPhi"       , 4));
@@ -252,13 +301,27 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> egCalibrationLUT( new l1t::LUT(egCalibrationLUTStream) );
-    m_params.setEgCalibrationLUT(egCalibrationLUT);
+    m_params.setEgCalibrationLUT(*egCalibrationLUT);
+
+    //New Calibration LUT
+
+    stringstream egCalibrationLUTFile_new;
+    egCalibrationLUTFile_new << getenv("CMSSW_BASE") << "/src/" << params.GetValue("egCalibrationLUTFile", "L1Trigger/L1TCalorimeter/data/egCalibrationLUT_eta4_shape4_E4_correct.txt.txt");
+    std::ifstream egCalibrationLUTStream_new(egCalibrationLUTFile_new.str());
+    if(!egCalibrationLUTStream_new.is_open())
+    {
+        cout<<"[ERROR] Cannot open " << egCalibrationLUTFile_new.str()<<"\n";
+        return false;
+    }
+    std::shared_ptr<l1t::LUT> egCalibrationLUT_new( new l1t::LUT(egCalibrationLUTStream_new) );
+    m_params.setEgCalibrationLUT_new(*egCalibrationLUT_new);
+
 
     // Tau
     m_params.setTauLsb                (params.GetValue("tauLsb"                        , 0.5));
     m_params.setTauSeedThreshold      (params.GetValue("tauSeedThreshold"              , 0.));
     m_params.setTauNeighbourThreshold (params.GetValue("tauNeighbourThreshold"         , 0.));
-    m_params.setTauIsoPUSType         (params.GetValue("tauIsoPUSType"                 , "None"));
+    m_params.setTauPUSType         (params.GetValue("tauPUSType"                 , "None"));
 
     m_params.setTauIsoAreaNrTowersEta       (params.GetValue("tauIsoAreaNrTowersEta"       , 2));
     m_params.setTauIsoAreaNrTowersPhi       (params.GetValue("tauIsoAreaNrTowersPhi"       , 4));
@@ -279,7 +342,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> tauIsoLUT( new l1t::LUT(tauIsoLUTStream) );
-    m_params.setTauIsolationLUT(tauIsoLUT);
+    m_params.setTauIsolationLUT(*tauIsoLUT);
 
     stringstream tauCalibrationLUTFile;
     tauCalibrationLUTFile<< getenv("CMSSW_BASE") << "/src/" << params.GetValue("tauCalibrationLUTFile", "L1Trigger/L1TCalorimeter/data/tauCalibrationLUT.txt");
@@ -290,7 +353,7 @@ bool L1TStage2Wrapper::fillParameters(const string& parameterFile)
         return false;
     }
     std::shared_ptr<l1t::LUT> tauCalibrationLUT( new l1t::LUT(tauCalibrationLUTStream) );
-    m_params.setTauCalibrationLUT(tauCalibrationLUT);
+    m_params.setTauCalibrationLUT(*tauCalibrationLUT);
 
 
     return true;
