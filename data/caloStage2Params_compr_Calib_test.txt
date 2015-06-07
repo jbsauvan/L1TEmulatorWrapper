@@ -1,0 +1,54 @@
+
+# towers
+towerLsbH: 0.5
+towerLsbE: 0.5
+towerLsbSum: 0.5
+towerNBitsH: 8
+towerNBitsE: 8
+towerNBitsSum: 9
+towerNBitsRatio: 3
+towerEncoding: False
+
+# EG
+calibration_version: 1
+egLsb: 0.5
+egSeedThreshold: 2.
+egNeighbourThreshold: 1.
+egHcalThreshold: 0.
+egMaxHcalEt: 0.
+egEtToRemoveHECut: 128.
+egTrimmingLUTFile: L1Trigger/L1TCalorimeter/data/egTrimmingLUT_5.txt
+egCompressShapesLUTFile: L1Trigger/L1TCalorimeter/data/egCompressShapesLUT.txt
+egCompressShapesLUTFile_calibr_new: L1Trigger/L1TCalorimeter/data/egCompressShapesLUT_calibr_4bit_v2.txt
+egCompressELUTFile_calibr_new: L1Trigger/L1TCalorimeter/data/egCompressELUT_5bit_v3.txt
+egCompressEtaLUTFile_calibr_new: L1Trigger/L1TCalorimeter/data/egCompressEtaLUT_3bit_v3.txt
+egMaxHOverELUTFile: L1Trigger/L1TCalorimeter/data/egMaxHOverELUT_995eff.txt
+egShapeIdLUTFile: L1Trigger/L1TCalorimeter/data/egShapeIdLUT_995eff.txt
+egPUSType: None
+###egIsoLUTFile: L1Trigger/L1TCalorimeter/data/egIsoLUT_PU40bx25.txt
+egIsoLUTFile: L1Trigger/L1TCalorimeter/data/egIsoLUTPU40bx25NrRings4Eff95.txt
+egIsoAreaNrTowersEta: 2
+egIsoAreaNrTowersPhi: 4
+egIsoVetoNrTowersPhi: 3
+##egIsoPUEstTowerGranularity: 1
+##egIsoMaxEtaAbsForTowerSum: 4
+##egIsoMaxEtaAbsForIsoSum: 27
+egPUSParams.0: 1
+egPUSParams.1: 4
+egPUSParams.2: 27
+egCalibrationLUTFile: L1Trigger/L1TCalorimeter/data/corrections_Trimming2_PU40bx25_ieta3_shape4_E5_v3.txt
+
+
+# Tau
+tauLsb: 0.5
+tauSeedThreshold: 0.
+tauNeighbourThreshold: 0.
+tauIsoPUSType: None
+tauIsoLUTFile: L1Trigger/L1TCalorimeter/data/tauIsoLUTetPU.txt
+tauIsoAreaNrTowersEta: 2
+tauIsoAreaNrTowersPhi: 4
+tauIsoVetoNrTowersPhi: 2
+tauPUSParams.0: 1
+tauPUSParams.1: 4
+tauPUSParams.2: 27
+tauCalibrationLUTFile: L1Trigger/L1TCalorimeter/data/tauCalibrationLUT.txt
