@@ -7,7 +7,7 @@ UCFLAGS = -O3 -Wall -gstabs+ -fpic
 
 
 RUCFLAGS := $(shell root-config --cflags) -I./include/ -I${CMSSW_BASE}/src/ -I${CMSSW_RELEASE_BASE}/src/ 
-LIBS :=  $(shell root-config --libs) -lTreePlayer -L${CMSSW_BASE}/lib/slc6_amd64_gcc481/ -L${CMSSW_RELEASE_BASE}/lib/slc6_amd64_gcc481/ -lTreePlayer -lDataFormatsL1TCalorimeter -lDataFormatsL1Trigger -lCondFormatsL1TObjects -lL1TriggerL1TCalorimeter
+LIBS :=  $(shell root-config --libs) -lTreePlayer -L${CMSSW_BASE}/lib/${SCRAM_ARCH}/ -L${CMSSW_RELEASE_BASE}/lib/${SCRAM_ARCH}/ -lTreePlayer -lDataFormatsL1TCalorimeter -lDataFormatsL1Trigger -lCondFormatsL1TObjects -lL1TriggerL1TCalorimeter
 GLIBS := $(shell root-config --glibs)
 
 vpath %.cpp ./src
