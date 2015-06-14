@@ -87,8 +87,8 @@ bool L1TStage2Wrapper::process(const vector<int>& hwEta, const vector<int>& hwPh
     // build objects
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
-    m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
-    m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
+    //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
+    //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
     return true;
 }
@@ -108,8 +108,8 @@ bool L1TStage2Wrapper::process(const vector<l1t::CaloTower>& towers)
     // build objects
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
-    m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
-    m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
+    //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
+    //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
     return true;
 }
