@@ -20,11 +20,21 @@
 #ifndef L1TSTAGE2WRAPPER_H
 #define L1TSTAGE2WRAPPER_H
 
-#include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2ClusterAlgorithm.h"
-#include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2EGammaAlgorithm.h"
-#include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2TauAlgorithm.h"
+#include "DataFormats/L1TCalorimeter/interface/CaloTower.h"
+#include "DataFormats/L1TCalorimeter/interface/CaloCluster.h"
+#include "DataFormats/L1Trigger/interface/EGamma.h"
+#include "DataFormats/L1Trigger/interface/Tau.h"
 
 #include "CondFormats/L1TObjects/interface/CaloParams.h"
+
+namespace l1t
+{
+    class Stage2TowerCompressAlgorithm;
+    class Stage2TowerDecompressAlgorithm;
+    class Stage2Layer2ClusterAlgorithm;
+    class Stage2Layer2EGammaAlgorithm;
+    class Stage2Layer2TauAlgorithm;
+}
 
 namespace l1twrapper
 {
@@ -56,13 +66,17 @@ namespace l1twrapper
             l1t::CaloParams m_params;
 
             // producers
-            l1t::Stage2Layer2ClusterAlgorithm* m_egClusterAlgo;
-            l1t::Stage2Layer2EGammaAlgorithm*  m_egAlgo;
-            l1t::Stage2Layer2ClusterAlgorithm* m_tauClusterAlgo;
-            l1t::Stage2Layer2TauAlgorithm*     m_tauAlgo;
+            l1t::Stage2TowerCompressAlgorithm*   m_towerCompressAlgo;
+            l1t::Stage2TowerDecompressAlgorithm* m_towerDecompressAlgo;
+            l1t::Stage2Layer2ClusterAlgorithm*   m_egClusterAlgo;
+            l1t::Stage2Layer2EGammaAlgorithm*    m_egAlgo;
+            l1t::Stage2Layer2ClusterAlgorithm*   m_tauClusterAlgo;
+            l1t::Stage2Layer2TauAlgorithm*       m_tauAlgo;
 
             // produced objects
             std::vector<l1t::CaloTower>   m_towers;
+            std::vector<l1t::CaloTower>   m_towersCompress;
+            std::vector<l1t::CaloTower>   m_towersOut;
             std::vector<l1t::CaloCluster> m_egClusters;
             std::vector<l1t::CaloCluster> m_tauClusters;
             std::vector<l1t::EGamma>      m_egammas;

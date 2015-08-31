@@ -25,6 +25,8 @@
 
 #include "L1TStage2Wrapper.h"
 
+#include "L1Trigger/L1TCalorimeter/interface/Stage2TowerCompressAlgorithmFirmware.h"
+#include "L1Trigger/L1TCalorimeter/interface/Stage2TowerDecompressAlgorithmFirmware.h""
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2ClusterAlgorithmFirmware.h"
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2EGammaAlgorithmFirmware.h"
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2TauAlgorithmFirmware.h"
@@ -44,6 +46,8 @@ L1TStage2Wrapper::L1TStage2Wrapper()
 L1TStage2Wrapper::~L1TStage2Wrapper()
 /*****************************************************************/
 {
+    delete m_towerCompressAlgo;
+    delete m_towerDecompressAlgo;
     delete m_egClusterAlgo;
     delete m_egAlgo;
     delete m_tauClusterAlgo;
@@ -59,9 +63,12 @@ bool L1TStage2Wrapper::initialize(const string& parameterFile)
     bool status = fillParameters(parameterFile);
     if(!status) return status;
 
+
     // initialize algos
-    m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::E);
-    //m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::EH);
+    m_towerCompressAlgo   = new l1t::Stage2TowerCompressAlgorithmFirmwareImp1(&m_params);
+    m_towerDecompressAlgo = new l1t::Stage2TowerDecompressAlgorithmFirmwareImp1(&m_params);
+    //m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::E);
+    m_egClusterAlgo  = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::EH);
     m_egAlgo         = new l1t::Stage2Layer2EGammaAlgorithmFirmwareImp1(&m_params);
     m_tauClusterAlgo = new l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1(&m_params, l1t::Stage2Layer2ClusterAlgorithmFirmwareImp1::ClusterInput::EH);
     m_tauAlgo        = new l1t::Stage2Layer2TauAlgorithmFirmwareImp1(&m_params);
@@ -80,11 +87,15 @@ bool L1TStage2Wrapper::process(const vector<int>& hwEta, const vector<int>& hwPh
     if(!status) return status;
 
     // clear objects
+    m_towersCompress.clear();
+    m_towersOut.clear();
     m_egClusters.clear();
     m_egammas.clear();
     m_tauClusters.clear();
     m_taus.clear();
     // build objects
+    m_towerCompressAlgo->processEvent( m_towers, m_towersCompress);
+    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towersOut);
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
     //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
@@ -101,13 +112,17 @@ bool L1TStage2Wrapper::process(const vector<l1t::CaloTower>& towers)
     m_towers = towers;
 
     // clear objects
+    m_towersCompress.clear();
+    m_towersOut.clear();
     m_egClusters.clear();
     m_egammas.clear();
     m_tauClusters.clear();
     m_taus.clear();
     // build objects
-    m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
-    m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
+    m_towerCompressAlgo->processEvent( m_towers, m_towersCompress);
+    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towersOut);
+    m_egClusterAlgo ->processEvent( m_towersOut, m_egClusters );
+    m_egAlgo        ->processEvent( m_egClusters, m_towersOut, m_egammas );
     //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
     //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
