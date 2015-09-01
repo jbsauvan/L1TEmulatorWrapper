@@ -74,9 +74,9 @@ namespace l1twrapper
             l1t::Stage2Layer2TauAlgorithm*       m_tauAlgo;
 
             // produced objects
-            std::vector<l1t::CaloTower>   m_towers;
+            std::vector<l1t::CaloTower>   m_towersIn;
             std::vector<l1t::CaloTower>   m_towersCompress;
-            std::vector<l1t::CaloTower>   m_towersOut;
+            std::vector<l1t::CaloTower>   m_towers;
             std::vector<l1t::CaloCluster> m_egClusters;
             std::vector<l1t::CaloCluster> m_tauClusters;
             std::vector<l1t::EGamma>      m_egammas;

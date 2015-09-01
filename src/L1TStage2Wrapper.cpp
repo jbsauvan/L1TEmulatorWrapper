@@ -26,7 +26,7 @@
 #include "L1TStage2Wrapper.h"
 
 #include "L1Trigger/L1TCalorimeter/interface/Stage2TowerCompressAlgorithmFirmware.h"
-#include "L1Trigger/L1TCalorimeter/interface/Stage2TowerDecompressAlgorithmFirmware.h""
+#include "L1Trigger/L1TCalorimeter/interface/Stage2TowerDecompressAlgorithmFirmware.h"
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2ClusterAlgorithmFirmware.h"
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2EGammaAlgorithmFirmware.h"
 #include "L1Trigger/L1TCalorimeter/interface/Stage2Layer2TauAlgorithmFirmware.h"
@@ -88,14 +88,14 @@ bool L1TStage2Wrapper::process(const vector<int>& hwEta, const vector<int>& hwPh
 
     // clear objects
     m_towersCompress.clear();
-    m_towersOut.clear();
+    m_towers.clear();
     m_egClusters.clear();
     m_egammas.clear();
     m_tauClusters.clear();
     m_taus.clear();
     // build objects
-    m_towerCompressAlgo->processEvent( m_towers, m_towersCompress);
-    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towersOut);
+    m_towerCompressAlgo->processEvent( m_towersIn, m_towersCompress);
+    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towers);
     m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
     m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
     //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
@@ -108,21 +108,21 @@ bool L1TStage2Wrapper::process(const vector<int>& hwEta, const vector<int>& hwPh
 bool L1TStage2Wrapper::process(const vector<l1t::CaloTower>& towers)
 /*****************************************************************/
 {
-    m_towers.clear();
-    m_towers = towers;
+    m_towersIn.clear();
+    m_towersIn = towers;
 
     // clear objects
     m_towersCompress.clear();
-    m_towersOut.clear();
+    m_towers.clear();
     m_egClusters.clear();
     m_egammas.clear();
     m_tauClusters.clear();
     m_taus.clear();
     // build objects
-    m_towerCompressAlgo->processEvent( m_towers, m_towersCompress);
-    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towersOut);
-    m_egClusterAlgo ->processEvent( m_towersOut, m_egClusters );
-    m_egAlgo        ->processEvent( m_egClusters, m_towersOut, m_egammas );
+    m_towerCompressAlgo->processEvent( m_towersIn, m_towersCompress);
+    m_towerDecompressAlgo->processEvent( m_towersCompress, m_towers);
+    m_egClusterAlgo ->processEvent( m_towers, m_egClusters );
+    m_egAlgo        ->processEvent( m_egClusters, m_towers, m_egammas );
     //m_tauClusterAlgo->processEvent( m_towers, m_tauClusters );
     //m_tauAlgo       ->processEvent( m_tauClusters, m_towers, m_taus );
 
@@ -142,9 +142,9 @@ bool L1TStage2Wrapper::fillTowers(const vector<int>& hwEta, const vector<int>& h
         return false;
     }
     // clear towers
-    m_towers.clear();
+    m_towersIn.clear();
     // fill towers from input vectors
-    m_towers.reserve(nTowers);
+    m_towersIn.reserve(nTowers);
     for(unsigned tt=0; tt<nTowers; tt++)
     {
         l1t::CaloTower tower;
@@ -155,7 +155,7 @@ bool L1TStage2Wrapper::fillTowers(const vector<int>& hwEta, const vector<int>& h
         tower.setHwPt     ( hwEtEm[tt] + hwEtHad[tt] );
         tower.setHwEtRatio( hwEtRatio[tt] );
         tower.setHwQual   ( hwQual[tt] );
-        m_towers.push_back(tower);
+        m_towersIn.push_back(tower);
     }
     return true;
 }

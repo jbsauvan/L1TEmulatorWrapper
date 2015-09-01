@@ -7,7 +7,7 @@ towerNBitsH: 8
 towerNBitsE: 8
 towerNBitsSum: 9
 towerNBitsRatio: 3
-towerEncoding: False
+towerEncoding: True
 
 # EG
 egLsb: 0.5
